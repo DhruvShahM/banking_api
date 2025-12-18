@@ -130,7 +130,7 @@ func ListAccounts(c *gin.Context) {
 }
 
 // Transfer
-func Tranfer(c *gin.Context) {
+func Transfer(c *gin.Context) {
 	fromID, err := strconv.Atoi(c.Param("from_id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid from_id"})
@@ -260,7 +260,7 @@ func MakePayment(c *gin.Context) {
 
 }
 
-func ListPayements(c *gin.Context) {
+func ListPayments(c *gin.Context) {
 	loanID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid loan_id"})

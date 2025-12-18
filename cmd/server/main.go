@@ -50,28 +50,28 @@ func main() {
 	r.Use(gin.Logger()) // Logging middleware
 
 	// CORS Middleware - Applied globally for all routes
-	r.Use(corsMiddleware())
+	r.Use(corsMiddleWare())
 
 	// public routes
-	r.Post("/auth/register", handlers.Register)
-	r.Post("/auth/login", handlers.Login)
+	r.POST("/auth/register", handlers.Register)
+	r.POST("/auth/login", handlers.Login)
 
 	// protected routes
 	protected := r.Group("")
 	protected.Use(authMiddleWare())
 
 	// accounts
-	protected.POST("/accounts".handlers.CreateAccount)
-	protected.GET("/accounts".handlers.ListAccounts)
-	protected.POST("/transfers/:from_id".handlers.Transfer)
-	protected.POST("/deposits/:account_id".handlers.Deposit)
-	protected.GET("/accounts/:id/statements".handlers.GetStatements)
+	protected.POST("/accounts", handlers.CreateAccount)
+	protected.GET("/accounts", handlers.ListAccounts)
+	protected.POST("/transfers/:from_id", handlers.Transfer)
+	protected.POST("/deposits/:account_id", handlers.Deposit)
+	protected.GET("/accounts/:id/statements", handlers.GetStatements)
 
 	// Loans
-	protected.POST("/loans".handlers.CreateLoan)
-	protected.GET("/loans".handlers.ListLoan)
-	protected.POST("/loans/:id/repay".handlers.MakePayment)
-	protected.POST("/loans/:id/payments".handlers.ListPayments)
+	protected.POST("/loans", handlers.CreateLoan)
+	protected.GET("/loans", handlers.ListLoans)
+	protected.POST("/loans/:id/repay", handlers.MakePayment)
+	protected.POST("/loans/:id/payments", handlers.ListPayments)
 
 	// beneficaries
 	protected.POST("/beneficiaries", handlers.AddBeneficiary)
@@ -84,7 +84,7 @@ func main() {
 func authMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if c.GetHeader("Authorization") == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthosized, gin.H{"error": "Unauthorized"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			return
 		}
 
@@ -95,10 +95,10 @@ func authMiddleWare() gin.HandlerFunc {
 
 func corsMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Writer().Header().Set("Access-Control-Allow-Origin", "***")
-		c.Writer().Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT,DELETE, OPTIONS")
-		c.Writer().Header().Set("Access-Control-Allow-Headers", "Origin,Content-Type,Authorization,X-Requested-With")
-		c.Writer().Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		// handle preflight options requests
 		if c.Request.Method == "OPTIONS" {
